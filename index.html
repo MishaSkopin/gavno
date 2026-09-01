@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Запрошення</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        :root {
+            --bg-color: #121212;
+            --card-bg: #1e1e1e;
+            --text-color: #ffffff;
+            --accent-color: #ff3366;
+            --accent-hover: #ff1953;
+            --input-bg: #2d2d2d;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            box-sizing: border-box;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 400px;
+            background: var(--card-bg);
+            padding: 24px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            text-align: center;
+            box-sizing: border-box;
+        }
+
+        .slide {
+            display: none;
+            animation: fadeIn 0.4s ease-in-out;
+        }
+
+        .slide.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h2 {
+            font-size: 22px;
+            margin-bottom: 24px;
+            line-height: 1.4;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        button.option-btn {
+            background-color: var(--input-bg);
+            color: var(--text-color);
+            border: 2px solid transparent;
+            padding: 14px 18px;
+            border-radius: 12px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: left;
+            width: 100%;
+        }
+
+        button.option-btn:hover, button.option-btn.selected {
+            background-color: rgba(255, 51, 102, 0.15);
+            border-color: var(--accent-color);
+        }
+
+        .datetime-picker {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 24px;
+            text-align: left;
+        }
+
+        label {
+            font-size: 14px;
+            color: #aaa;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        input[type="date"], input[type="time"] {
+            width: 100%;
+            padding: 12px;
+            background: var(--input-bg);
+            border: 1px solid #444;
+            color: #fff;
+            border-radius: 10px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+
+        .action-btn {
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            width: 100%;
+            padding: 14px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .action-btn:hover {
+            background-color: var(--accent-hover);
+        }
+
+        .summary-box {
+            background: var(--input-bg);
+            padding: 16px;
+            border-radius: 12px;
+            text-align: left;
+            margin-bottom: 20px;
+            font-size: 15px;
+            line-height: 1.6;
+        }
+
+        .summary-box p {
+            margin: 8px 0;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- Слайд 1 -->
+        <div class="slide active" id="slide-1">
+            <h2>Куди підемо гуляти? 🏙️</h2>
+            <div class="options">
+                <button class="option-btn" onclick="selectOption(1, 'Парк і кава в стаканчиках')">☕ Парк і кава в стаканчиках</button>
+                <button class="option-btn" onclick="selectOption(1, 'Затишна кав’ярня з десертами')">🍰 Затишна кав’ярня з десертами</button>
+                <button class="option-btn" onclick="selectOption(1, 'Просто вечірнє місто і настрій')">🌙 Просто вечірнє місто і настрій</button>
+            </div>
+            <button class="action-btn" id="next-1" style="display:none;" onclick="nextSlide(2)">Далі</button>
+        </div>
+
+        <!-- Слайд 2 -->
+        <div class="slide" id="slide-2">
+            <h2>Який вайб оберемо? ✨</h2>
+            <div class="options">
+                <button class="option-btn" onclick="selectOption(2, 'Спокійні розмови під музику')">🎧 Спокійні розмови під музику</button>
+                <button class="option-btn" onclick="selectOption(2, 'Багато сміху і кумедні історії')">🗣️ Багато сміху і кумедні історії</button>
+                <button class="option-btn" onclick="selectOption(2, 'Релакс і споглядання всього навколо')">🌊 Релакс і споглядання всього навколо</button>
+            </div>
+            <button class="action-btn" id="next-2" style="display:none;" onclick="nextSlide(3)">Далі</button>
+        </div>
+
+        <!-- Слайд 3 -->
+        <div class="slide" id="slide-3">
+            <h2>Коли тобі зручно? 📅</h2>
+            <div class="datetime-picker">
+                <div>
+                    <label for="date-input">Дата:</label>
+                    <input type="date" id="date-input">
+                </div>
+                <div>
+                    <label for="time-input">Час:</label>
+                    <input type="time" id="time-input" value="18:00">
+                </div>
+            </div>
+            <button class="action-btn" onclick="checkDateTime()">Далі</button>
+        </div>
+
+        <!-- Слайд 4 (Фінал) -->
+        <div class="slide" id="slide-4">
+            <h2>План затверджено! 🎉</h2>
+            <div class="summary-box" id="summary-text">
+                <!-- Сюди динамічно підтягнеться результат -->
+            </div>
+            <button class="action-btn" onclick="finishApp()">Надіслати відповідь</button>
+        </div>
+    </div>
+
+    <script>
+        let tg = window.Telegram.WebApp;
+        tg.expand(); // Розгортаємо на весь екран
+
+        let answers = {
+            place: '',
+            vibes: '',
+            date: '',
+            time: ''
+        };
+
+        function selectOption(slideNum, value) {
+            // Знімаємо виділення з кнопок цього слайду
+            const buttons = document.querySelectorAll(`#slide-${slideNum} .option-btn`);
+            buttons.forEach(btn => btn.classList.remove('selected'));
+
+            // Додаємо виділення на натиснуту
+            event.target.classList.add('selected');
+
+            // Зберігаємо вибір
+            if (slideNum === 1) answers.place = value;
+            if (slideNum === 2) answers.vibes = value;
+
+            // Показуємо кнопку "Далі"
+            document.getElementById(`next-${slideNum}`).style.display = 'block';
+        }
+
+        function nextSlide(slideNum) {
+            document.querySelectorAll('.slide').forEach(s => s.classList.remove('active'));
+            document.getElementById(`slide-${slideNum}`).classList.add('active');
+
+            if (slideNum === 4) {
+                // Формуємо підсумок перед показом фіналу
+                let dateVal = document.getElementById('date-input').value || 'Не вказано';
+                let timeVal = document.getElementById('time-input').value || 'Не вказано';
+                
+                answers.date = dateVal;
+                answers.time = timeVal;
+
+                document.getElementById('summary-text').innerHTML = `
+                    <p><b>Локація:</b> ${answers.place}</p>
+                    <p><b>Вайб:</b> ${answers.vibes}</p>
+                    <p><b>Коли:</b> ${answers.date} о ${answers.time}</p>
+                `;
+            }
+        }
+
+        function checkDateTime() {
+            let dateVal = document.getElementById('date-input').value;
+            if (!dateVal) {
+                alert('Будь ласка, обери дату!');
+                return;
+            }
+            nextSlide(4);
+        }
+
+        function finishApp() {
+            // Формуємо об'єкт для відправки назад у чат бота (якщо потрібно)
+            let resultData = JSON.stringify(answers);
+            
+            // Закриваємо міні ап і передаємо дані (або просто закриваємо)
+            tg.sendData(resultData);
+            tg.close();
+        }
+    </script>
+</body>
+</html>
