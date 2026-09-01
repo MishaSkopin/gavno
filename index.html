@@ -337,7 +337,7 @@
             nextSlide(6);
         }
 
-        function validateSlide8() {
+     function validateSlide8() {
             let dateVal = document.getElementById('date-input').value;
             let timeVal = document.getElementById('time-input').value;
             if (!dateVal) {
@@ -347,25 +347,27 @@
             answers.date = dateVal;
             answers.time = timeVal;
 
-            let formatFinal = answers.format.includes('сама обери') 
+            // Виправляємо перевірку кастомних полів:
+            let formatFinal = answers.format.includes('4.сама обери') 
                 ? (document.getElementById('custom-1').value.trim() || 'Свій варіант') 
                 : answers.format;
 
-            let cultureFinal = answers.culture.includes('сама блять вибирай') 
+            let cultureFinal = answers.culture.includes('3.сама блять вибирай') 
                 ? (document.getElementById('custom-4').value.trim() || 'Свій варіант') 
                 : answers.culture;
 
             document.getElementById('final-summary').innerHTML = `
-                <b>Формат:</b> ${formatFinal}<br>
-                <b>Заправка:</b> ${answers.drink}<br>
-                <b>Солодке/не солодке:</b> ${answers.food}<br>
-                <b>Культура:</b> ${cultureFinal}<br>
-                <b>Цвіточки:</b> ${answers.flowers}<br>
-                <b>Дрес-код:</b> ${answers.dresscode}<br>
-                <b>Коли:</b> ${answers.date} о ${answers.time}
+                <b>раз:</b> ${formatFinal}<br>
+                <b>два:</b> ${answers.drink}<br>
+                <b>три:</b> ${answers.food}<br>
+                <b>чотири:</b> ${cultureFinal}<br>
+                <b>пять:</b> ${answers.flowers}<br>
+                <b>шесть:</b> ${answers.dresscode}<br>
+                <b>семки єсть?:</b> ${answers.date} о ${answers.time}
             `;
 
             nextSlide(9);
+        }
         }
 
         function nextSlide(slideNum) {
@@ -373,14 +375,15 @@
             document.getElementById(`slide-${slideNum}`).classList.add('active');
         }
 
-        function finishApp() {
+        
+function finishApp() {
             const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyWLprcsZ0gOqTJp7dPiJhndVoNNwpnlx4-CJEUZugPHYrMzpBx628VJwN_0vp9IcWR/exec";
 
-            let formatFinal = answers.format.includes('сама обери') 
+            let formatFinal = answers.format.includes('4.сама обери') 
                 ? (document.getElementById('custom-1').value.trim() || 'Свій варіант') 
                 : answers.format;
 
-            let cultureFinal = answers.culture.includes('сама блять вибирай') 
+            let cultureFinal = answers.culture.includes('3.сама блять вибирай') 
                 ? (document.getElementById('custom-4').value.trim() || 'Свій варіант') 
                 : answers.culture;
 
@@ -395,14 +398,14 @@
                 time: answers.time
             };
 
-            fetch(WEB_APP_URL, {
+            fetch(CLOUDFLARE_WORKER_URL, {
                 method: 'POST',
-                mode: 'no-cors',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(payload)
-            }).then(() => {
+            }).then(response => response.json())
+              .then(data => {
                 alert("Усе записано! ❤️");
                 tg.close();
             }).catch(error => {
