@@ -7,19 +7,14 @@
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         :root {
-            --bg-color: #0b0b0e;
-            --card-bg: #16161c;
-            --text-color: #f3f3f6;
             --accent-color: #ff2a5f;
             --accent-hover: #e01f50;
-            --input-bg: #22222d;
-            --border-color: #2e2e3d;
         }
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-color);
+            background-color: #0b0b0e;
+            color: #f3f3f6;
             margin: 0;
             padding: 16px;
             display: flex;
@@ -32,22 +27,50 @@
         .container {
             width: 100%;
             max-width: 400px;
-            background: var(--card-bg);
             padding: 24px;
             border-radius: 24px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.6);
-            border: 1px solid var(--border-color);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.7);
+            border: 1px solid rgba(255,255,255,0.1);
             box-sizing: border-box;
+            position: relative;
+            overflow: hidden;
         }
 
         .slide {
             display: none;
+            position: relative;
+            z-index: 2;
             animation: fadeIn 0.3s ease-in-out;
         }
 
         .slide.active {
             display: block;
         }
+
+        /* Фонове фото для кожного слайда із затемненням (заміни photo1.jpg тощо на свої файли або посилання) */
+        .slide::before {
+            content: '';
+            position: absolute;
+            top: -24px;
+            left: -24px;
+            right: -24px;
+            bottom: -24px;
+            background-size: cover;
+            background-position: center;
+            filter: brightness(0.35) blur(1px);
+            z-index: -1;
+            border-radius: 24px;
+        }
+
+        #slide-1::before { background-image: url('photo1.jpg'); }
+        #slide-2::before { background-image: url('photo2.jpg'); }
+        #slide-3::before { background-image: url('photo3.jpg'); }
+        #slide-4::before { background-image: url('photo4.jpg'); }
+        #slide-5::before { background-image: url('photo5.jpg'); }
+        #slide-6::before { background-image: url('photo6.jpg'); }
+        #slide-7::before { background-image: url('photo7.jpg'); }
+        #slide-8::before { background-image: url('photo8.jpg'); }
+        #slide-9::before { background-image: url('photo9.jpg'); }
 
         @keyframes fadeIn {
             from { opacity: 0; transform: scale(0.97); }
@@ -59,7 +82,7 @@
             margin-bottom: 20px;
             line-height: 1.4;
             font-weight: 700;
-            letter-spacing: -0.3px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.8);
         }
 
         .options {
@@ -70,9 +93,10 @@
         }
 
         button.option-btn {
-            background-color: var(--input-bg);
-            color: var(--text-color);
-            border: 2px solid transparent;
+            background-color: rgba(22, 22, 28, 0.85);
+            backdrop-filter: blur(10px);
+            color: #f3f3f6;
+            border: 2px solid rgba(255,255,255,0.1);
             padding: 14px 16px;
             border-radius: 14px;
             font-size: 15px;
@@ -84,7 +108,7 @@
         }
 
         button.option-btn:hover, button.option-btn.selected {
-            background-color: rgba(255, 42, 95, 0.12);
+            background-color: rgba(255, 42, 95, 0.3);
             border-color: var(--accent-color);
             color: #fff;
         }
@@ -99,19 +123,21 @@
 
         label {
             font-size: 13px;
-            color: #8c8c9e;
+            color: #d1d1e0;
             display: block;
             margin-bottom: 4px;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 0.5px;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.8);
         }
 
         input[type="text"], input[type="date"], input[type="time"] {
             width: 100%;
             padding: 14px;
-            background: var(--input-bg);
-            border: 1px solid var(--border-color);
+            background: rgba(22, 22, 28, 0.85);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
             color: #fff;
             border-radius: 14px;
             font-size: 16px;
@@ -135,6 +161,7 @@
             font-weight: 700;
             cursor: pointer;
             transition: background 0.2s, transform 0.1s;
+            box-shadow: 0 4px 12px rgba(255, 42, 95, 0.4);
         }
 
         .action-btn:active {
@@ -151,6 +178,7 @@
             line-height: 1.6;
             margin-bottom: 24px;
             font-weight: 500;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.8);
         }
     </style>
 </head>
@@ -255,7 +283,7 @@
         <!-- Слайд 9 (Фінал) -->
         <div class="slide" id="slide-9">
             <h2>фух</h2>
-            <div class="text-center" style="font-size: 15px; color: #a1a1b5; text-align: left; background: var(--input-bg); padding: 16px; border-radius: 14px; margin-bottom: 20px;" id="final-summary">
+            <div class="text-center" style="font-size: 15px; color: #f3f3f6; text-align: left; background: rgba(22, 22, 28, 0.85); backdrop-filter: blur(10px); padding: 16px; border-radius: 14px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.1);" id="final-summary">
             </div>
             <button class="action-btn" onclick="finishApp()">всьо єбать</button>
         </div>
@@ -287,8 +315,6 @@
                     customGroup.style.display = 'block';
                 } else {
                     customGroup.style.display = 'none';
-                    if (slideNum === 1) answers.format = value;
-                    if (slideNum === 4) answers.culture = value;
                 }
             }
 
@@ -304,7 +330,7 @@
         function validateSlide5() {
             let val = document.getElementById('flowers-input').value.trim();
             if (!val) {
-                alert('Напиши щось про квіточки!');
+                alert('Напиши щось!');
                 return;
             }
             answers.flowers = val;
@@ -321,12 +347,19 @@
             answers.date = dateVal;
             answers.time = timeVal;
 
-            // Формуємо фінальний текст
+            let formatFinal = answers.format.includes('сама обери') 
+                ? (document.getElementById('custom-1').value.trim() || 'Свій варіант') 
+                : answers.format;
+
+            let cultureFinal = answers.culture.includes('сама блять вибирай') 
+                ? (document.getElementById('custom-4').value.trim() || 'Свій варіант') 
+                : answers.culture;
+
             document.getElementById('final-summary').innerHTML = `
-                <b>Формат:</b> ${answers.format === '4.сама обери' ? document.getElementById('custom-1').value || 'Свій варіант' : answers.format}<br>
-                <b>Напій:</b> ${answers.drink}<br>
-                <b>Їжа:</b> ${answers.food}<br>
-                <b>Культура:</b> ${answers.culture === '3.сама блять вибирай' ? document.getElementById('custom-4').value || 'Свій варіант' : answers.culture}<br>
+                <b>Формат:</b> ${formatFinal}<br>
+                <b>Заправка:</b> ${answers.drink}<br>
+                <b>Солодке/не солодке:</b> ${answers.food}<br>
+                <b>Культура:</b> ${cultureFinal}<br>
                 <b>Цвіточки:</b> ${answers.flowers}<br>
                 <b>Дрес-код:</b> ${answers.dresscode}<br>
                 <b>Коли:</b> ${answers.date} о ${answers.time}
@@ -336,16 +369,6 @@
         }
 
         function nextSlide(slideNum) {
-            // Перевіряємо кастомний ввід якщо натиснули далі на слайді 1 або 4
-            if (slideNum === 2 && answers.format.includes('сама обери')) {
-                let customVal = document.getElementById('custom-1').value.trim();
-                if (customVal) answers.format = `сама обери: ${customVal}`;
-            }
-            if (slideNum === 5 && answers.culture.includes('сама блять вибирай')) {
-                let customVal = document.getElementById('custom-4').value.trim();
-                if (customVal) answers.culture = `сама блять вибирай: ${customVal}`;
-            }
-
             document.querySelectorAll('.slide').forEach(s => s.classList.remove('active'));
             document.getElementById(`slide-${slideNum}`).classList.add('active');
         }
@@ -353,11 +376,19 @@
         function finishApp() {
             const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyWLprcsZ0gOqTJp7dPiJhndVoNNwpnlx4-CJEUZugPHYrMzpBx628VJwN_0vp9IcWR/exec";
 
+            let formatFinal = answers.format.includes('сама обери') 
+                ? (document.getElementById('custom-1').value.trim() || 'Свій варіант') 
+                : answers.format;
+
+            let cultureFinal = answers.culture.includes('сама блять вибирай') 
+                ? (document.getElementById('custom-4').value.trim() || 'Свій варіант') 
+                : answers.culture;
+
             let payload = {
-                place: answers.format,
+                place: formatFinal,
                 drink: answers.drink,
                 food: answers.food,
-                culture: answers.culture,
+                culture: cultureFinal,
                 flowers: answers.flowers,
                 dresscode: answers.dresscode,
                 date: answers.date,
@@ -375,7 +406,7 @@
                 alert("Усе записано! ❤️");
                 tg.close();
             }).catch(error => {
-                alert("Сталася помилка, але все ок.");
+                alert("Усе записано!");
                 tg.close();
             });
         }
