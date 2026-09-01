@@ -7,12 +7,13 @@
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         :root {
-            --bg-color: #121212;
-            --card-bg: #1e1e1e;
-            --text-color: #ffffff;
-            --accent-color: #ff3366;
-            --accent-hover: #ff1953;
-            --input-bg: #2d2d2d;
+            --bg-color: #0b0b0e;
+            --card-bg: #16161c;
+            --text-color: #f3f3f6;
+            --accent-color: #ff2a5f;
+            --accent-hover: #e01f50;
+            --input-bg: #22222d;
+            --border-color: #2e2e3d;
         }
 
         body {
@@ -20,7 +21,7 @@
             background-color: var(--bg-color);
             color: var(--text-color);
             margin: 0;
-            padding: 20px;
+            padding: 16px;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -33,15 +34,15 @@
             max-width: 400px;
             background: var(--card-bg);
             padding: 24px;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            text-align: center;
+            border-radius: 24px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.6);
+            border: 1px solid var(--border-color);
             box-sizing: border-box;
         }
 
         .slide {
             display: none;
-            animation: fadeIn 0.4s ease-in-out;
+            animation: fadeIn 0.3s ease-in-out;
         }
 
         .slide.active {
@@ -49,20 +50,22 @@
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+            from { opacity: 0; transform: scale(0.97); }
+            to { opacity: 1; transform: scale(1); }
         }
 
         h2 {
-            font-size: 22px;
-            margin-bottom: 24px;
+            font-size: 20px;
+            margin-bottom: 20px;
             line-height: 1.4;
+            font-weight: 700;
+            letter-spacing: -0.3px;
         }
 
         .options {
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 10px;
             margin-bottom: 20px;
         }
 
@@ -70,44 +73,55 @@
             background-color: var(--input-bg);
             color: var(--text-color);
             border: 2px solid transparent;
-            padding: 14px 18px;
-            border-radius: 12px;
-            font-size: 16px;
+            padding: 14px 16px;
+            border-radius: 14px;
+            font-size: 15px;
             cursor: pointer;
             transition: all 0.2s ease;
             text-align: left;
             width: 100%;
+            font-weight: 500;
         }
 
         button.option-btn:hover, button.option-btn.selected {
-            background-color: rgba(255, 51, 102, 0.15);
+            background-color: rgba(255, 42, 95, 0.12);
             border-color: var(--accent-color);
+            color: #fff;
         }
 
-        .datetime-picker {
+        .input-group {
             display: flex;
             flex-direction: column;
-            gap: 15px;
-            margin-bottom: 24px;
+            gap: 12px;
+            margin-bottom: 20px;
             text-align: left;
         }
 
         label {
-            font-size: 14px;
-            color: #aaa;
+            font-size: 13px;
+            color: #8c8c9e;
             display: block;
-            margin-bottom: 5px;
+            margin-bottom: 4px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
-        input[type="date"], input[type="time"] {
+        input[type="text"], input[type="date"], input[type="time"] {
             width: 100%;
-            padding: 12px;
+            padding: 14px;
             background: var(--input-bg);
-            border: 1px solid #444;
+            border: 1px solid var(--border-color);
             color: #fff;
-            border-radius: 10px;
+            border-radius: 14px;
             font-size: 16px;
             box-sizing: border-box;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        input[type="text"]:focus, input[type="date"]:focus, input[type="time"]:focus {
+            border-color: var(--accent-color);
         }
 
         .action-btn {
@@ -115,30 +129,28 @@
             color: white;
             border: none;
             width: 100%;
-            padding: 14px;
-            border-radius: 12px;
+            padding: 15px;
+            border-radius: 14px;
             font-size: 16px;
-            font-weight: bold;
+            font-weight: 700;
             cursor: pointer;
-            transition: background 0.2s;
+            transition: background 0.2s, transform 0.1s;
+        }
+
+        .action-btn:active {
+            transform: scale(0.98);
         }
 
         .action-btn:hover {
             background-color: var(--accent-hover);
         }
 
-        .summary-box {
-            background: var(--input-bg);
-            padding: 16px;
-            border-radius: 12px;
-            text-align: left;
-            margin-bottom: 20px;
-            font-size: 15px;
+        .text-center {
+            text-align: center;
+            font-size: 18px;
             line-height: 1.6;
-        }
-
-        .summary-box p {
-            margin: 8px 0;
+            margin-bottom: 24px;
+            font-weight: 500;
         }
     </style>
 </head>
@@ -147,138 +159,226 @@
     <div class="container">
         <!-- Слайд 1 -->
         <div class="slide active" id="slide-1">
-            <h2>Куди підемо гуляти? 🏙️</h2>
+            <h2>Як тусимо?</h2>
             <div class="options">
-                <button class="option-btn" onclick="selectOption(1, 'Парк і кава в стаканчиках')">☕ Парк і кава в стаканчиках</button>
-                <button class="option-btn" onclick="selectOption(1, 'Затишна кав’ярня з десертами')">🍰 Затишна кав’ярня з десертами</button>
-                <button class="option-btn" onclick="selectOption(1, 'Просто вечірнє місто і настрій')">🌙 Просто вечірнє місто і настрій</button>
+                <button class="option-btn" onclick="selectOption(1, '1.актівна прогулка бля')">1. актівна прогулка бля</button>
+                <button class="option-btn" onclick="selectOption(1, '2.чіл на лавочке')">2. чіл на лавочке</button>
+                <button class="option-btn" onclick="selectOption(1, '3.можна дома, но ти не готова')">3. можна дома, но ти не готова</button>
+                <button class="option-btn" onclick="selectOption(1, '4.сама обери', true)">4. сама обери</button>
+            </div>
+            <div class="input-group" id="input-group-1" style="display:none;">
+                <label for="custom-1">Впиши свій варіант:</label>
+                <input type="text" id="custom-1" placeholder="Свою ідею сюди...">
             </div>
             <button class="action-btn" id="next-1" style="display:none;" onclick="nextSlide(2)">Далі</button>
         </div>
 
         <!-- Слайд 2 -->
         <div class="slide" id="slide-2">
-            <h2>Який вайб оберемо? ✨</h2>
+            <h2>Чим заправляємось?</h2>
             <div class="options">
-                <button class="option-btn" onclick="selectOption(2, 'Спокійні розмови під музику')">🎧 Спокійні розмови під музику</button>
-                <button class="option-btn" onclick="selectOption(2, 'Багато сміху і кумедні історії')">🗣️ Багато сміху і кумедні історії</button>
-                <button class="option-btn" onclick="selectOption(2, 'Релакс і споглядання всього навколо')">🌊 Релакс і споглядання всього навколо</button>
+                <button class="option-btn" onclick="selectOption(2, '1.кава')">1. кава</button>
+                <button class="option-btn" onclick="selectOption(2, '2.піво і вінстон')">2. піво і вінстон</button>
+                <button class="option-btn" onclick="selectOption(2, '3.шото тіпа я хз')">3. шото тіпа я хз</button>
             </div>
             <button class="action-btn" id="next-2" style="display:none;" onclick="nextSlide(3)">Далі</button>
         </div>
 
         <!-- Слайд 3 -->
         <div class="slide" id="slide-3">
-            <h2>Коли тобі зручно? 📅</h2>
-            <div class="datetime-picker">
+            <h2>По жратві/солодкому що?</h2>
+            <div class="options">
+                <button class="option-btn" onclick="selectOption(3, '1.сладкое')">1. сладкое</button>
+                <button class="option-btn" onclick="selectOption(3, '2.не сладкое')">2. не сладкое</button>
+            </div>
+            <button class="action-btn" id="next-3" style="display:none;" onclick="nextSlide(4)">Далі</button>
+        </div>
+
+        <!-- Слайд 4 -->
+        <div class="slide" id="slide-4">
+            <h2>Культурна програма</h2>
+            <div class="options">
+                <button class="option-btn" onclick="selectOption(4, '1.го в театр мб')">1. го в театр мб</button>
+                <button class="option-btn" onclick="selectOption(4, '2.чи кіно')">2. чи кіно</button>
+                <button class="option-btn" onclick="selectOption(4, '3.сама блять вибирай', true)">3. сама блять вибирай</button>
+            </div>
+            <div class="input-group" id="input-group-4" style="display:none;">
+                <label for="custom-4">Впиши свій варіант:</label>
+                <input type="text" id="custom-4" placeholder="Свою ідею сюди...">
+            </div>
+            <button class="action-btn" id="next-4" style="display:none;" onclick="nextSlide(5)">Далі</button>
+        </div>
+
+        <!-- Слайд 5 -->
+        <div class="slide" id="slide-5">
+            <h2>цветочкі?</h2>
+            <div class="input-group">
+                <label for="flowers-input">Твоя відповідь:</label>
+                <input type="text" id="flowers-input" placeholder="Тут можна написати будь-що...">
+            </div>
+            <button class="action-btn" onclick="validateSlide5()">Далі</button>
+        </div>
+
+        <!-- Слайд 6 -->
+        <div class="slide" id="slide-6">
+            <h2>Дрес-код</h2>
+            <div class="options">
+                <button class="option-btn" onclick="selectOption(6, '1.ми нєфорюгі бандююгани')">1. ми нєфорюгі бандююгани</button>
+                <button class="option-btn" onclick="selectOption(6, '2.ми офішл')">2. ми офішл</button>
+                <button class="option-btn" onclick="selectOption(6, '3.тяжолий люкс')">3. тяжолий люкс</button>
+            </div>
+            <button class="action-btn" id="next-6" style="display:none;" onclick="nextSlide(7)">Далі</button>
+        </div>
+
+        <!-- Слайд 7 -->
+        <div class="slide" id="slide-7">
+            <div class="text-center">ти реально красотка</div>
+            <button class="action-btn" onclick="nextSlide(8)">Далі</button>
+        </div>
+
+        <!-- Слайд 8 -->
+        <div class="slide" id="slide-8">
+            <h2>Коли бачимось?</h2>
+            <div class="input-group">
                 <div>
                     <label for="date-input">Дата:</label>
                     <input type="date" id="date-input">
                 </div>
-                <div>
+                <div style="margin-top: 10px;">
                     <label for="time-input">Час:</label>
                     <input type="time" id="time-input" value="18:00">
                 </div>
             </div>
-            <button class="action-btn" onclick="checkDateTime()">Далі</button>
+            <button class="action-btn" onclick="validateSlide8()">Далі</button>
         </div>
 
-        <!-- Слайд 4 (Фінал) -->
-        <div class="slide" id="slide-4">
-            <h2>План затверджено! 🎉</h2>
-            <div class="summary-box" id="summary-text">
-                <!-- Сюди динамічно підтягнеться результат -->
+        <!-- Слайд 9 (Фінал) -->
+        <div class="slide" id="slide-9">
+            <h2>Все готово</h2>
+            <div class="text-center" style="font-size: 15px; color: #a1a1b5; text-align: left; background: var(--input-bg); padding: 16px; border-radius: 14px; margin-bottom: 20px;" id="final-summary">
             </div>
-            <button class="action-btn" onclick="finishApp()">Надіслати відповідь</button>
+            <button class="action-btn" onclick="finishApp()">всьо єбать</button>
         </div>
     </div>
 
     <script>
         let tg = window.Telegram.WebApp;
-        tg.expand(); // Розгортаємо на весь екран
+        tg.expand();
 
         let answers = {
-            place: '',
-            vibes: '',
+            format: '',
+            drink: '',
+            food: '',
+            culture: '',
+            flowers: '',
+            dresscode: '',
             date: '',
             time: ''
         };
 
-        function selectOption(slideNum, value) {
-            // Знімаємо виділення з кнопок цього слайду
+        function selectOption(slideNum, value, hasCustomInput = false) {
             const buttons = document.querySelectorAll(`#slide-${slideNum} .option-btn`);
             buttons.forEach(btn => btn.classList.remove('selected'));
-
-            // Додаємо виділення на натиснуту
             event.target.classList.add('selected');
 
-            // Зберігаємо вибір
-            if (slideNum === 1) answers.place = value;
-            if (slideNum === 2) answers.vibes = value;
+            const customGroup = document.getElementById(`input-group-${slideNum}`);
+            if (customGroup) {
+                if (hasCustomInput) {
+                    customGroup.style.display = 'block';
+                } else {
+                    customGroup.style.display = 'none';
+                    if (slideNum === 1) answers.format = value;
+                    if (slideNum === 4) answers.culture = value;
+                }
+            }
 
-            // Показуємо кнопку "Далі"
+            if (slideNum === 1) answers.format = value;
+            if (slideNum === 2) answers.drink = value;
+            if (slideNum === 3) answers.food = value;
+            if (slideNum === 4) answers.culture = value;
+            if (slideNum === 6) answers.dresscode = value;
+
             document.getElementById(`next-${slideNum}`).style.display = 'block';
         }
 
-        function nextSlide(slideNum) {
-            document.querySelectorAll('.slide').forEach(s => s.classList.remove('active'));
-            document.getElementById(`slide-${slideNum}`).classList.add('active');
-
-            if (slideNum === 4) {
-                // Формуємо підсумок перед показом фіналу
-                let dateVal = document.getElementById('date-input').value || 'Не вказано';
-                let timeVal = document.getElementById('time-input').value || 'Не вказано';
-                
-                answers.date = dateVal;
-                answers.time = timeVal;
-
-                document.getElementById('summary-text').innerHTML = `
-                    <p><b>Локація:</b> ${answers.place}</p>
-                    <p><b>Вайб:</b> ${answers.vibes}</p>
-                    <p><b>Коли:</b> ${answers.date} о ${answers.time}</p>
-                `;
-            }
-        }
-
-        function checkDateTime() {
-            let dateVal = document.getElementById('date-input').value;
-            if (!dateVal) {
-                alert('Будь ласка, обери дату!');
+        function validateSlide5() {
+            let val = document.getElementById('flowers-input').value.trim();
+            if (!val) {
+                alert('Напиши щось про квіточки!');
                 return;
             }
-            nextSlide(4);
+            answers.flowers = val;
+            nextSlide(6);
         }
 
-       function finishApp() {
-    let dateVal = document.getElementById('date-input').value;
-    let timeVal = document.getElementById('time-input').value;
+        function validateSlide8() {
+            let dateVal = document.getElementById('date-input').value;
+            let timeVal = document.getElementById('time-input').value;
+            if (!dateVal) {
+                alert('Обери дату!');
+                return;
+            }
+            answers.date = dateVal;
+            answers.time = timeVal;
 
-    let payload = {
-        place: answers.place,
-        vibes: answers.vibes,
-        date: dateVal,
-        time: timeVal
-    };
+            // Формуємо фінальний текст
+            document.getElementById('final-summary').innerHTML = `
+                <b>Формат:</b> ${answers.format === '4.сама обери' ? document.getElementById('custom-1').value || 'Свій варіант' : answers.format}<br>
+                <b>Напій:</b> ${answers.drink}<br>
+                <b>Їжа:</b> ${answers.food}<br>
+                <b>Культура:</b> ${answers.culture === '3.сама блять вибирай' ? document.getElementById('custom-4').value || 'Свій варіант' : answers.culture}<br>
+                <b>Цвіточки:</b> ${answers.flowers}<br>
+                <b>Дрес-код:</b> ${answers.dresscode}<br>
+                <b>Коли:</b> ${answers.date} о ${answers.time}
+            `;
 
-    // Встав своє скопійоване посилання на веб-додаток між лапками нижче ↓
-    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyWLprcsZ0gOqTJp7dPiJhndVoNNwpnlx4-CJEUZugPHYrMzpBx628VJwN_0vp9IcWR/exec";
+            nextSlide(9);
+        }
 
-    // Відправляємо дані в таблицю
-    fetch(WEB_APP_URL, {
-        method: 'POST',
-        mode: 'no-cors', // Потрібно для обходу блокувань браузера
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(payload)
-    }).then(() => {
-        // Показуємо їй повідомлення про успіх і закриваємо міні-ап
-        alert("Усе записано! ❤️");
-        tg.close();
-    }).catch(error => {
-        alert("Сталася помилка, спробуй ще раз.");
-    });
-}
+        function nextSlide(slideNum) {
+            // Перевіряємо кастомний ввід якщо натиснули далі на слайді 1 або 4
+            if (slideNum === 2 && answers.format.includes('сама обери')) {
+                let customVal = document.getElementById('custom-1').value.trim();
+                if (customVal) answers.format = `сама обери: ${customVal}`;
+            }
+            if (slideNum === 5 && answers.culture.includes('сама блять вибирай')) {
+                let customVal = document.getElementById('custom-4').value.trim();
+                if (customVal) answers.culture = `сама блять вибирай: ${customVal}`;
+            }
+
+            document.querySelectorAll('.slide').forEach(s => s.classList.remove('active'));
+            document.getElementById(`slide-${slideNum}`).classList.add('active');
+        }
+
+        function finishApp() {
+            const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyWLprcsZ0gOqTJp7dPiJhndVoNNwpnlx4-CJEUZugPHYrMzpBx628VJwN_0vp9IcWR/exec";
+
+            let payload = {
+                place: answers.format,
+                drink: answers.drink,
+                food: answers.food,
+                culture: answers.culture,
+                flowers: answers.flowers,
+                dresscode: answers.dresscode,
+                date: answers.date,
+                time: answers.time
+            };
+
+            fetch(WEB_APP_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(payload)
+            }).then(() => {
+                alert("Усе записано! ❤️");
+                tg.close();
+            }).catch(error => {
+                alert("Сталася помилка, але все ок.");
+                tg.close();
+            });
+        }
     </script>
 </body>
 </html>
