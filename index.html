@@ -249,14 +249,36 @@
             nextSlide(4);
         }
 
-        function finishApp() {
-            // Формуємо об'єкт для відправки назад у чат бота (якщо потрібно)
-            let resultData = JSON.stringify(answers);
-            
-            // Закриваємо міні ап і передаємо дані (або просто закриваємо)
-            tg.sendData(resultData);
-            tg.close();
-        }
+       function finishApp() {
+    let dateVal = document.getElementById('date-input').value;
+    let timeVal = document.getElementById('time-input').value;
+
+    let payload = {
+        place: answers.place,
+        vibes: answers.vibes,
+        date: dateVal,
+        time: timeVal
+    };
+
+    // Встав своє скопійоване посилання на веб-додаток між лапками нижче ↓
+    const WEB_APP_URL = "ТУТ_ВСТАВ_ПОСИЛАННЯ_З_GOOGLE_APPS_SCRIPT";
+
+    // Відправляємо дані в таблицю
+    fetch(WEB_APP_URL, {
+        method: 'POST',
+        mode: 'no-cors', // Потрібно для обходу блокувань браузера
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(payload)
+    }).then(() => {
+        // Показуємо їй повідомлення про успіх і закриваємо міні-ап
+        alert("Усе записано! ❤️");
+        tg.close();
+    }).catch(error => {
+        alert("Сталася помилка, спробуй ще раз.");
+    });
+}
     </script>
 </body>
 </html>
