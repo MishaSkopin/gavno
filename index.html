@@ -289,7 +289,7 @@
         </div>
     </div>
 
-    <script>
+<script>
         let tg = window.Telegram.WebApp;
         tg.expand();
 
@@ -337,7 +337,7 @@
             nextSlide(6);
         }
 
-     function validateSlide8() {
+        function validateSlide8() {
             let dateVal = document.getElementById('date-input').value;
             let timeVal = document.getElementById('time-input').value;
             if (!dateVal) {
@@ -347,7 +347,6 @@
             answers.date = dateVal;
             answers.time = timeVal;
 
-            // Виправляємо перевірку кастомних полів:
             let formatFinal = answers.format.includes('4.сама обери') 
                 ? (document.getElementById('custom-1').value.trim() || 'Свій варіант') 
                 : answers.format;
@@ -368,15 +367,13 @@
 
             nextSlide(9);
         }
-        }
 
         function nextSlide(slideNum) {
             document.querySelectorAll('.slide').forEach(s => s.classList.remove('active'));
             document.getElementById(`slide-${slideNum}`).classList.add('active');
         }
 
-        
-function finishApp() {
+        function finishApp() {
             const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyWLprcsZ0gOqTJp7dPiJhndVoNNwpnlx4-CJEUZugPHYrMzpBx628VJwN_0vp9IcWR/exec";
 
             let formatFinal = answers.format.includes('4.сама обери') 
@@ -398,10 +395,10 @@ function finishApp() {
                 time: answers.time
             };
 
-            fetch(CLOUDFLARE_WORKER_URL, {
+            fetch(WEB_APP_URL, {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'text/plain;charset=utf-8'
                 },
                 body: JSON.stringify(payload)
             }).then(response => response.json())
